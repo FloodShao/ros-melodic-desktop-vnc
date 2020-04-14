@@ -64,7 +64,8 @@ RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD $SH_DIR/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
-### ================
+
+### ======install ros==========
 # install ros(from https://github.com/osrf/docker_images/blob/b075c7dbe56055d862f331f19e1e74ba653e181a/ros/melodic/ubuntu/bionic/ros-core/Dockerfile)
 # install packages
 RUN apt-get update && apt-get install -q -y \
@@ -72,11 +73,12 @@ RUN apt-get update && apt-get install -q -y \
     gnupg2 \
     && rm -rf /var/lib/apt/lists/*
 
-# setup keys
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # setup sources.list
 RUN echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros1-latest.list
+
+# setup keys
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -100,8 +102,10 @@ RUN apt-get update && apt-get install -y \
     ros-melodic-desktop-full \
     && rm -rf /var/lib/apt/lists/*
 
-# setup environment
-RUN echo "source /opt/ros/melodic/setup.bash" >> /root/.bashrc
+# install catkin
+RUN apt-get update && apt-get install -y \
+  python-catkin-tools \
+  && rm -rf /var/lib/apt/lists/* 
 
 # =========================
 # user tools， -y means type yes when interactive 
@@ -113,6 +117,11 @@ RUN apt-get update && apt-get install -y \
 
 # Change USER to 0 to get the root
 USER 1000
+
+# setup environment, now in the user mode
+RUN echo "source /opt/ros/melodic/setup.bash" >> /headless/.bashrc
+# source is the command in /bin/bash, while the default shell is /bin/sh
+RUN /bin/bash -c 'source /headless/.bashrc'
 
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
