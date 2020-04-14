@@ -25,3 +25,14 @@ Download the vnc viewer client [here](https://www.realvnc.com/en/connect/downloa
 
 ![test_gazebo](https://github.com/FloodShao/ros-melodic-desktop-vnc/blob/master/fig/test_gazebo.png?raw=true)
 
+#### File system
+![test_gazebo](https://github.com/FloodShao/ros-melodic-desktop-vnc/blob/master/fig/file_sys.png?raw=true)
+
+The default user name is 'default', with the home dir is /headless.
+If you want to attach a directory to this docker image, add the `-v` param in the command as follow:
+
+`docker run -it -p 5901:5901 -p 6901:6901 -v /<host_dir>:/<docker_dir>  ros_images/melodic-desktop /bin/bash`
+
+where `<host_dir>` is the absolute dir in your host machine, and `<docker_dir>` is the absolute dir in your docker. 
+
+For example, I will use `-v /$(pwd)/workspace:/headless/workspace` to create a link between the host machine and the docker. After you delete the docker (stop the docker ps), the files in your host machine (as in /$(pwd)/workspace) will not disappear. You can use this feature to load your program locally to your docker environment rather than clone from your git repo each time.  
