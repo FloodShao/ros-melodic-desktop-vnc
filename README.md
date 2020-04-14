@@ -23,5 +23,5 @@ Download the vnc viewer client [here](https://www.realvnc.com/en/connect/downloa
 4. open vnc viewer client, type the server address <localhost:5901>, key in the password: **vncpassword**
 5. open the terminal and test gazebo
 
-![test_gazebo](./pic/test_gazebo.png)
+![test_gazebo](https://github.com/FloodShao/ros-melodic-desktop-vnc/tree/master/fig)
 
